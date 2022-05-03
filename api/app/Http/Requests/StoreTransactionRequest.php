@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTransactionRequest extends FormRequest
 {
@@ -24,7 +25,10 @@ class StoreTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => ['required', 'exists:categories,id'],
+            'category_id' => [
+                'required', 'exists:categories,id', 
+                Rule::exists('categories', 'id')->where('user_id', auth()->id())
+            ],
             'amount' => ['required', 'numeric'],
             'description' => ['nullable'],
             'transaction_date' => ['required']

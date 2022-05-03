@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,4 +33,12 @@ class Transaction extends Model
         );
     }
 
+
+    public static function booted() {
+        if(auth()->check()){
+            static::addGlobalScope('by_user', function(Builder $builder) {
+                $builder->where('user_id', auth()->id());
+            });
+        }
+    }
 }
