@@ -1,3 +1,6 @@
+import 'package:app/screens/CategoriesScreen.dart';
+import 'package:app/screens/LoginScreen.dart';
+import 'package:app/screens/RegisterScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,52 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter app',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
-        body: Container(
-          color: Theme.of(context).primaryColorDark,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Card(
-                elevation: 8,
-                margin: EdgeInsets.only(left: 16, right: 16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          label: Text('Email'),
-                        ),
-                      ),
-                      TextField(
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          label: Text('Password'),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: ElevatedButton(
-                          onPressed: () => {print("login clicked")},
-                          child: Text('Login'),
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(double.infinity, 42),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: LoginScreen(),
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
+        '/categories': (context) => CategoriesScreen()
+      },
     );
   }
 }
