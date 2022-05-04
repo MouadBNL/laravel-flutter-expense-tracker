@@ -27,7 +27,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->delete('auth/logout', [AuthController::class, 'logout']);
 
 
-Route::group(['middleware' => 'auth:sanctum'], function() {
+Route::group([/*'middleware' => 'auth:sanctum'*/], function() {
     
     Route::apiResource('categories', CategoryController::class);
     

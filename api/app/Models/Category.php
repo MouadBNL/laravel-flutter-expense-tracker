@@ -12,11 +12,11 @@ class Category extends Model
 
     protected $guarded = [];
 
-    public static function booted() {
-        if(auth()->check()){
-            static::addGlobalScope('by_user', function(Builder $builder) {
-                $builder->where('user_id', auth()->id());
-            });
-        }
-    }
+    // public static function booted() {
+    //     if(auth()->check()){
+    //         static::addGlobalScope('by_user', function(Builder $builder) {
+    //             $builder->where('user_id', auth()->id());
+    //         });
+    //     }
+    // }
 }
