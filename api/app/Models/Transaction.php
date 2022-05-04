@@ -33,7 +33,6 @@ class Transaction extends Model
         );
     }
 
-
     public static function booted() {
         if(auth()->check()){
             static::addGlobalScope('by_user', function(Builder $builder) {
