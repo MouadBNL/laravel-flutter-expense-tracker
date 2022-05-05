@@ -64,7 +64,6 @@ class ApiService {
         headers: _apiHeaders,
         body: jsonEncode({'name': name}),
       );
-      print(res.body);
       if (res.statusCode != 201) {
         throw Exception();
       }
@@ -72,5 +71,35 @@ class ApiService {
     } catch (e) {
       throw Exception('An error has occured, please try again.');
     }
+  }
+
+  Future<String> register(String name, String email, String password,
+      String passwordConfirm, String deviceName) async {
+    String uri = _baseURI + 'auth/register';
+
+    http.Response res = await http.post(
+      Uri.parse(uri),
+      headers: _apiHeaders,
+      body: jsonEncode({
+        'name': name,
+        'email': email,
+        'password': password,
+        'password_confirmation': passwordConfirm,
+        'device_name': deviceName
+      }),
+    );
+    if (res.statusCode == 422) {
+      Map<String, dynamic> body = jsonDecode(res.body);
+      Map<String, dynamic> errors = body['errors'];
+      String errorMessage = '';
+      errors.forEach((key, value) {
+        value.forEach((element) {
+          errorMessage += element + '\n';
+        });
+      });
+      throw Exception(errorMessage);
+    }
+
+    return res.body;
   }
 }
