@@ -6,6 +6,10 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final String _baseURI = 'http://127.0.0.1:8000/api/';
+  final _apiHeaders = {
+    HttpHeaders.contentTypeHeader: 'application/json',
+    HttpHeaders.acceptHeader: 'application/json',
+  };
   ApiService();
 
   Future<List<Category>> fetchCategories() async {
@@ -16,20 +20,53 @@ class ApiService {
     return categories.map((cat) => Category.fromJson(cat)).toList();
   }
 
-  Future<Category> updateCategory(int id, String name) async {
-    String uri = _baseURI + 'categories/' + id.toString();
+  Future<Category> updateCategory(Category category) async {
+    String uri = _baseURI + 'categories/' + category.id.toString();
 
     try {
       http.Response res = await http.put(
         Uri.parse(uri),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.acceptHeader: 'application/json',
-        },
-        body: jsonEncode({'name': name}),
+        headers: _apiHeaders,
+        body: jsonEncode({'name': category.name}),
       );
       if (res.statusCode != 200) {
         throw Exception('An error has occured, please try again.');
+      }
+      return Category.fromJson(jsonDecode(res.body));
+    } catch (e) {
+      throw Exception('An error has occured, please try again.');
+    }
+  }
+
+  Future deleteCategory(int id) async {
+    String uri = _baseURI + 'categories/' + id.toString();
+
+    try {
+      http.Response res = await http.delete(
+        Uri.parse(uri),
+        headers: _apiHeaders,
+      );
+      if (res.statusCode != 204) {
+        throw Exception(
+            'An error has occured, please try again. status code invalid');
+      }
+    } catch (e) {
+      throw Exception('An error has occured in api, please try again.');
+    }
+  }
+
+  Future<Category> addCategory(String name) async {
+    String uri = _baseURI + 'categories';
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse(uri),
+        headers: _apiHeaders,
+        body: jsonEncode({'name': name}),
+      );
+      print(res.body);
+      if (res.statusCode != 201) {
+        throw Exception();
       }
       return Category.fromJson(jsonDecode(res.body));
     } catch (e) {

@@ -1,37 +1,28 @@
 import 'package:app/models/Category.dart';
+import 'package:app/services/Api.dart';
 import 'package:flutter/material.dart';
 
-class CategoryEdit extends StatefulWidget {
-  final Category category;
-  final Function categoryUpdateCallback;
-  CategoryEdit(this.category, this.categoryUpdateCallback, {Key? key})
-      : super(key: key);
+class CategoryAdd extends StatefulWidget {
+  final Function categoryAddCallback;
+  CategoryAdd(this.categoryAddCallback, {Key? key}) : super(key: key);
 
   @override
-  State<CategoryEdit> createState() => _CategoryEditState();
+  State<CategoryAdd> createState() => _CategoryAddState();
 }
 
-class _CategoryEditState extends State<CategoryEdit> {
+class _CategoryAddState extends State<CategoryAdd> {
   final _formKey = GlobalKey<FormState>();
   final categoryNameController = TextEditingController();
   String errorMessage = '';
 
-  @override
-  void initState() {
-    categoryNameController.text = widget.category.name;
-    super.initState();
-  }
-
-  Future _saveCategory() async {
+  Future _addCategory() async {
     final form = _formKey.currentState;
     if (!form!.validate()) {
       return;
     }
 
-    widget.category.name = categoryNameController.text;
-
     try {
-      await widget.categoryUpdateCallback(widget.category);
+      await widget.categoryAddCallback(categoryNameController.text);
       Navigator.pop(context);
     } catch (err) {
       setState(() {
@@ -61,8 +52,8 @@ class _CategoryEditState extends State<CategoryEdit> {
                       icon: Icon(Icons.close),
                     ),
                     ElevatedButton(
-                      onPressed: () => _saveCategory(),
-                      child: Text('Save'),
+                      onPressed: () => _addCategory(),
+                      child: Text('Create'),
                     ),
                   ],
                 ),
